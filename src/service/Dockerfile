@@ -1,5 +1,12 @@
-FROM python:3.8-slim-buster
+FROM python:3.9-slim-buster
 
-COPY seed.py /app/
+# Set the working directory to /app
+WORKDIR /app
 
-CMD ["python3", "/app/seed.py"]
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+CMD ["python", "seed.py"]

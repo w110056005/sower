@@ -12,6 +12,8 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
+EXPOSE 8080
+EXPOSE 5555
 
 # Define environment variable
 ENV DJANGO_SETTINGS_MODULE=sower_platform.settings

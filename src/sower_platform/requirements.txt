@@ -1,2 +1,5 @@
 Django
 djangorestframework
+pyzmq
+
+flwr

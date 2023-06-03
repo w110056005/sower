@@ -1,0 +1,12 @@
+[Unit]
+Description=Sower Client Service
+After=network.target
+
+[Service]
+User=Sower
+ExecStart=/usr/bin/python3 -m sower_client.script
+WorkingDirectory=./service
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

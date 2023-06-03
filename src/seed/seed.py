@@ -2,7 +2,7 @@ import zmq
 import subprocess
 
 
-print("Running Sower service in background...")
+print("Running Sower seed in background...")
 
 def execute_python_file(file_path):
     try:

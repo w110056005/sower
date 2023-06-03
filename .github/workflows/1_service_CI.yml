@@ -1,4 +1,4 @@
-name: Build and Push Service Image
+name: Build and Push Seed Image
 
 on:
   push:
@@ -25,6 +25,6 @@ jobs:
     - name: Push Docker image to Docker Hub
       uses: docker/build-push-action@v2
       with:
-        context: ./src/service
+        context: ./src/seed
         push: true
-        tags: w110056005/sower_service:latest
+        tags: w110056005/seed:latest

@@ -29,11 +29,17 @@ def management_view(request):
         # Process the submitted form data and perform actions based on the button clicked
         print("button:"+button)
         if button == 'TrainingStart':
-            print("Sending...")
+            print("Sending Start...")
             message = "Start"
             socket.send_string(message)
             execute_python_file("./website/server.py")
             pass
+        elif button == 'UpgradeSeed':
+            print("Sending Upgrading...")
+            message = "Upgrade"
+            socket.send_string(message)
+            pass
+
     else:
         form = ManagementForm()
     return render(request, 'management.html', {'form': form})

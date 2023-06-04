@@ -1,13 +1,12 @@
 pyzmq
 
 flwr
-tensorflow
 gym==0.23.0
 gym_super_mario_bros==7.4.0
 matplotlib
 torch
 scikit_image
 opencv-python
-nes-py
 numpy
 pyglet==1.5.21
+nes-py

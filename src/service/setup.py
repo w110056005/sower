@@ -12,5 +12,6 @@ setup(
     },
     install_requires=[
         'pyzmq',  # ZeroMQ library dependency
+        'docker-py', # docker library for python
     ],
 )

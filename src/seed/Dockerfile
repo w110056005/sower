@@ -6,6 +6,12 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+RUN apt-get update -y
+RUN apt-get install -y build-essential
+RUN python -m pip install --upgrade pip
+RUN pip install --upgrade wheel
+RUN pip install --upgrade setuptools
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 

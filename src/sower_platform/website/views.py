@@ -1,12 +1,24 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import zmq
+import subprocess
 from django.shortcuts import render, redirect
 from .forms import ManagementForm
-from common import util
-from shared.zmq_shared import ZmqShared
 
-zmq_shared = ZmqShared()
+# Create a ZeroMQ context
+context = zmq.Context()
+# Create a publisher socket
+socket = context.socket(zmq.PUB)
+# Bind the publisher socket to a specific address
+socket.bind("tcp://0.0.0.0:5555")
 
+def execute_python_file(file_path):
+    try:
+        # Execute the Python file as a separate process
+        subprocess.run(['python', file_path], check=True)
+    except subprocess.CalledProcessError as e:
+        # Handle any errors that occur during the execution
+        print(f"Error executing {file_path}: {e}")
 
 # Create your views here.
 def management_view(request):
@@ -16,17 +28,16 @@ def management_view(request):
         button = request.POST.get('button')
         # Process the submitted form data and perform actions based on the button clicked
         print("button:"+button)
-
         if button == 'TrainingStart':
             print("Sending Start...")
             message = "Start"
-            zmq_shared.publish_message(message)
-            util.execute_python_file("./website/server.py")
+            socket.send_string(message)
+            execute_python_file("./website/server.py")
             pass
         elif button == 'UpgradeSeed':
             print("Sending Upgrading...")
             message = "Upgrade"
-            zmq_shared.publish_message(message)
+            socket.send_string(message)
             pass
 
     else:

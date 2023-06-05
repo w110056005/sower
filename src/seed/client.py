@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 import copy
+import gym
+import time
 
 from collections import OrderedDict, deque, namedtuple
 from pathlib import Path
@@ -75,7 +77,7 @@ class Mario:
 
         # self.use_cuda = torch.cuda.is_available()
         self.use_cuda = False
-        if !self.use_cuda:
+        if not self.use_cuda:
             torch.set_num_threads(3)
 
         # Mario's DNN to predict the most optimal action - we implement this in the Learn section

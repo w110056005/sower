@@ -1,3 +1,9 @@
+### Required: Download release
+
+```bash
+wget https://github.com/w110056005/Sower/releases/download/latest/sower_client-<version>.tar.gz
+```
+
 ### Step 1: Install the package and its dependencies
 
 ```bash

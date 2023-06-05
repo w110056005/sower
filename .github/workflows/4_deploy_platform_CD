@@ -1,0 +1,35 @@
+name: Deploy Platform Container
+on:
+  workflow_run:
+    workflows: ["Build and Push Platform Image"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Pull Docker image
+        run: docker pull w110056005/sower_platform:latest
+
+      - name: Stop and remove existing container
+        run: |
+          if [ "$(docker ps -aq -f name=sower_platform_container)" ]; then
+            docker stop sower_platform_container
+            docker rm sower_platform_container
+          fi
+
+      - name: Start Docker container
+        run: |
+          docker run -d --name sower_platform_container \
+            -p 5555:5555 \
+            -p 8010:8000 \
+            -p 8090:8080 \
+            w110056005/sower_platform:latest
+
+      - name: Prune dangling images
+        run: docker image prune -f

@@ -23,14 +23,18 @@ def update_seed():
     client = docker.from_env()
     client.images.pull('w110056005/seed:latest')
 
-    container = client.containers.get('sower_seed_container')
-    container.stop()
-    container.remove()
+    try:
+        container = client.containers.get('sower_seed_container')
+        container.stop()
+        container.remove()
+    except:
+        print("no running sower_seed_container...")
 
     client.containers.run(
         'w110056005/seed:latest',
         name='sower_seed_container',
-        detach=True
+        detach=True, 
+        links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
     )
 
 def main():

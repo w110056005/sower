@@ -10,7 +10,7 @@ from collections import OrderedDict, deque, namedtuple
 from pathlib import Path
 
 from torch import nn
-from gym.wrappers import FrameStack, GrayScaleObservation, TransformObservation
+from gym.wrappers import FrameStack, GrayScaleObservation, TransformObservation, RecordVideo
 from gym.spaces import Box
 from nes_py.wrappers import JoypadSpace
 from skimage import transform
@@ -387,11 +387,12 @@ class FlowerClient(fl.client.NumPyClient):
         self.env = ResizeObservation(self.env, shape=84)
         self.env = TransformObservation(self.env, f=lambda x: x / 255.)
         self.env = FrameStack(self.env, num_stack=4)
+        self.env = RecordVideo(self.env, video_folder='./mario_videos',episode_trigger=lambda x: x% 20==0)
 
         self.env.reset()
 
         save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
-        save_dir.mkdir(parents=True)
+        save_dir.mkdir(parents=True, exist_ok=True)
 
         checkpoint = None # Path('checkpoints/2020-10-21T18-25-27/mario.chkpt')
         self.mario = Mario(state_dim=(4, 84, 84), action_dim=self.env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
@@ -419,7 +420,7 @@ class FlowerClient(fl.client.NumPyClient):
             while True:
 
                 # 3. Show environment (the visual) [WIP]
-                self.env.render()
+                # self.env.render()
 
                 # 4. Run agent on the state
                 action = self.mario.act(state)
@@ -451,6 +452,7 @@ class FlowerClient(fl.client.NumPyClient):
                     epsilon=self.mario.exploration_rate,
                     step=self.mario.curr_step
                 )
+        env.close()
         
         return self.get_parameters(config={}), self.mario.curr_step, {}
 
@@ -468,14 +470,13 @@ class FlowerClient(fl.client.NumPyClient):
         env = ResizeObservation(env, shape=84)
         env = TransformObservation(env, f=lambda x: x / 255.)
         env = FrameStack(env, num_stack=4)
+        env = RecordVideo(env, video_folder='./mario_videos',episode_trigger=lambda x: x% 20==0)
 
         env.reset()
 
         save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
-        try:
-            save_dir.mkdir(parents=True)
-        except FileExistsError:
-            save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S-')
+       
+        save_dir.mkdir(parents=True, exist_ok=True)
 
         checkpoint = None
         mario = Mario(state_dim=(4, 84, 84), action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
@@ -491,7 +492,7 @@ class FlowerClient(fl.client.NumPyClient):
 
             while True:
 
-                env.render()
+                # env.render()
 
                 action = mario.act(state)
 
@@ -499,14 +500,14 @@ class FlowerClient(fl.client.NumPyClient):
 
                 mario.cache(state, next_state, action, reward, done)
 
-                # logger.log_step(reward, None, None)
+                logger.log_step(reward, None, None)
 
                 state = next_state
 
                 if done or info['flag_get']:
                     break
 
-            # logger.log_episode()
+            logger.log_episode()
 
             if e % 20 == 0:
                 logger.record(
@@ -514,6 +515,7 @@ class FlowerClient(fl.client.NumPyClient):
                     epsilon=mario.exploration_rate,
                     step=mario.curr_step
                 )
+        env.close()
         
         return logger.curr_ep_loss, 100, {"rewards": logger.curr_ep_reward}
 

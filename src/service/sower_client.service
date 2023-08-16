@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=Sower
-ExecStart=/usr/bin/python3 -m sower_client.script
+ExecStart=sower-start
 WorkingDirectory=./service
 Restart=always
 

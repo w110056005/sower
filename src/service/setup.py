@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='sower_client',
     version='1.0',
-    package_dir = {'service': 'src'},
+    package_dir = {'service': 'sower_client'},
     packages=find_packages(),
     entry_points={
         'console_scripts': [
@@ -11,7 +11,7 @@ setup(
         ],
     },
     install_requires=[
-        'pyzmq',  # ZeroMQ library dependency
-        'docker-py', # docker library for python
+        'paho-mqtt',  # MQTT library dependency
+        'docker', # docker library for python
     ],
 )

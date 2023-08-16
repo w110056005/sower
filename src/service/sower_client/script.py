@@ -1,28 +1,55 @@
-import zmq
-import subprocess
 import docker
+import random
 
-# Create a ZeroMQ context
-context = zmq.Context()
-# Create a subscriber socket
-socket = context.socket(zmq.SUB)
-# Set the subscription filter (empty string means subscribe to all messages)
-socket.setsockopt_string(zmq.SUBSCRIBE, '')
-# Connect to the publisher's address
-socket.connect('tcp://sower_platform_container:5555')
+from paho.mqtt import client as mqtt_client
 
-def execute_python_file(file_path):
+broker = 'broker.emqx.io'
+port = 1883
+topic = "Sower"
+# Generate a Client ID with the subscribe prefix.
+client_id = f'subscribe-{random.randint(0, 100)}'
+# username = 'emqx'
+# password = 'public'
+
+def connect_mqtt() -> mqtt_client:
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT Broker!")
+        else:
+            print("Failed to connect, return code %d\n", rc)
+
+    client = mqtt_client.Client(client_id)
+    # client.username_pw_set(username, password)
+    client.on_connect = on_connect
+    client.connect(broker, port)
+    return client
+
+def subscribe(client: mqtt_client):
+    def on_message(client, userdata, msg):
+        if(msg.payload.decode() == "Upgrade"):
+            update_seed()
+        else:
+            start_seed()
+    client.subscribe(topic)
+    client.on_message = on_message
+
+def start_seed():
+    client = docker.from_env()
     try:
-        # Execute the Python file as a separate process
-        subprocess.run(['python', file_path], check=True)
-    except subprocess.CalledProcessError as e:
-        # Handle any errors that occur during the execution
-        print(f"Error executing {file_path}: {e}")
+        client.containers.run(
+            'w110056005/seed:latest',
+            name='sower_seed_container',
+            detach=True, 
+            links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
+        )
+    except:
+        print("no running sower_seed_container...")
+
+
 
 def update_seed():
     client = docker.from_env()
     client.images.pull('w110056005/seed:latest')
-
     try:
         container = client.containers.get('sower_seed_container')
         container.stop()
@@ -30,22 +57,11 @@ def update_seed():
     except:
         print("no running sower_seed_container...")
 
-    client.containers.run(
-        'w110056005/seed:latest',
-        name='sower_seed_container',
-        detach=True, 
-        links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
-    )
-
 def main():
     print("Running Sower client in background...")
-    while True:
-        message = socket.recv_string()
-        print(f'Received message: {message}')
-    
-        if(message == "Upgrade"):
-            update_seed()
-
+    client = connect_mqtt()
+    subscribe(client)
+    client.loop_forever()
 
 if __name__ == "__main__":
     main()

@@ -35,12 +35,10 @@ This step installs `sower_client` with its dependencies. The `pip install` comma
 ### Last, setup the client as a service:
 
 ```bash
-sudo cp sower_client.service /etc/systemd/system/
-
-sudo systemctl enable sower_client
-sudo systemctl start sower_client
-
-sudo systemctl status sower_client
+sower-start
+#sudo systemctl enable sower_client
+#sudo systemctl start sower_client
+#sudo systemctl status sower_client
 ```
 
 ## Start Training

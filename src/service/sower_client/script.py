@@ -29,37 +29,31 @@ def subscribe(client: mqtt_client):
         print('Receive msg: '+ msg.payload.decode())
         if(msg.payload.decode() == "Upgrade"):
             update_seed()
-        else:
-            start_seed()
     client.subscribe(topic)
     client.on_message = on_message
 
-def start_seed():
-    client = docker.from_env()
-    try:
-        client.containers.run(
-            'w110056005/seed:latest',
-            name='sower_seed_container',
-            detach=True, 
-            links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
-        )
-        print('Seed is running.')
-    except:
-        print("no running sower_seed_container...")
-
-
-
 def update_seed():
+    print('Enter update_seed()')
     client = docker.from_env()
     client.images.pull('w110056005/seed:latest')
     print('Image pull completed.')
     try:
+        print('Removing legacy container.')
         container = client.containers.get('sower_seed_container')
         container.stop()
         container.remove()
         print('Legacy comtainer removed.')
+        print('Seed is running.')
     except:
         print("no running sower_seed_container...")
+
+    print('starting seed.')
+    client.containers.run(
+        'w110056005/seed:latest',
+        name='sower_seed_container',
+        detach=True, 
+        links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
+    )
 
 def main():
     print("Running Sower client in background...")

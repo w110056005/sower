@@ -35,7 +35,7 @@ def subscribe(client: mqtt_client):
 def update_seed():
     print('Enter update_seed()')
     client = docker.from_env()
-    client.images.pull('w110056005/seed:latest')
+    client.images.pull('w110056005/seed:cifar10-latest')
     print('Image pull completed.')
     try:
         print('Removing legacy container.')
@@ -49,7 +49,7 @@ def update_seed():
 
     print('starting seed.')
     client.containers.run(
-        'w110056005/seed:latest',
+        'w110056005/seed:cifar10-latest',
         name='sower_seed_container',
         detach=True, 
         links={'sower_platform_container': 'sower_platform_container'},  # Link to server container

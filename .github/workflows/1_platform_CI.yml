@@ -3,7 +3,7 @@ name: Build and Push Platform Image
 on:
   push:
     branches:
-      - master
+      - cifar10/dev
 
 jobs:
   build-and-push:
@@ -27,4 +27,4 @@ jobs:
       with:
         context: ./src/sower_platform
         push: true
-        tags: w110056005/sower_platform:latest
+        tags: w110056005/sower_platform:cifar10-latest

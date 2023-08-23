@@ -59,7 +59,7 @@ def management_view(request):
         if button == 'TrainingStart':
             print("Sending Start...")
             port = "8090"
-            message = "Start,{port}"
+            message = "Start,"+port
             print("Send: {message}")
             publish(client, message)
             execute_python_file("./website/server.py", port)

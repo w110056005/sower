@@ -1,3 +1,5 @@
 import flwr as fl
+import sys
 
-fl.server.start_server(config=fl.server.ServerConfig(num_rounds=3))
+port = sys.argv[1]
+fl.server.start_server(server_address="[::]:{port}", config=fl.server.ServerConfig(num_rounds=3))

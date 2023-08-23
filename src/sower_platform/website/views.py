@@ -39,10 +39,10 @@ def publish(client, msg):
         print(f"Failed to send message to topic {topic}")
 
 
-def execute_python_file(file_path):
+def execute_python_file(file_path, arg):
     try:
         # Execute the Python file as a separate process
-        subprocess.run(['python', file_path], check=True)
+        subprocess.run(['python', file_path, arg], check=True)
     except subprocess.CalledProcessError as e:
         # Handle any errors that occur during the execution
         print(f"Error executing {file_path}: {e}")
@@ -58,9 +58,11 @@ def management_view(request):
         print("button:"+button)
         if button == 'TrainingStart':
             print("Sending Start...")
-            message = "Start"
+            port = "8090"
+            message = "Start,{port}"
+            print("Send: {message}")
             publish(client, message)
-            execute_python_file("./website/server.py")
+            execute_python_file("./website/server.py", port)
             pass
         elif button == 'UpgradeSeed':
             print("Sending Upgrading...")

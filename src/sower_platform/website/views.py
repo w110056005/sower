@@ -39,10 +39,10 @@ def publish(client, msg):
         print(f"Failed to send message to topic {topic}")
 
 
-def execute_python_file(file_path, arg):
+def execute_python_file(file_path, port):
     try:
         # Execute the Python file as a separate process
-        subprocess.run(['python', file_path, arg], check=True)
+        subprocess.run(['python', file_path, port], check=True)
     except subprocess.CalledProcessError as e:
         # Handle any errors that occur during the execution
         print(f"Error executing {file_path}: {e}")

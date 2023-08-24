@@ -12,7 +12,7 @@ docker pull <your-account>/sower_platform:latest
 ```
 ### 2. run platform
 ```bash
-docker run -d --name sower_platform_container -p 5555:5555  -p 8000:8000 -p 8080:8080 sower_platform:latest
+docker run -d --name sower_platform_container -p 8000:8000 -p 8080:8080 sower_platform:latest
 ```
 
 ## In all clients
@@ -35,10 +35,7 @@ This step installs `sower_client` with its dependencies. The `pip install` comma
 ### Last, setup the client as a service:
 
 ```bash
-sower-start
-#sudo systemctl enable sower_client
-#sudo systemctl start sower_client
-#sudo systemctl status sower_client
+sower start
 ```
 
 ## Start Training

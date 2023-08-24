@@ -7,7 +7,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'sower-start = sower_client.script:main',
+            'sower = sower_client.script:main',
         ],
     },
     install_requires=[

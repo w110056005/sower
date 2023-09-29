@@ -61,19 +61,25 @@ def start():
     subscribe(client)
     client.loop_forever()
 
-def login(node_id):
+def login():
     import requests
     r = requests.get('http://sower_platform_container:8000/login', params={'node_id' : node_id})
-    print(r.text)
+    print(r.text+ ' registered.')
 
 def main():
+    import socket
     import sys
 
-    cmd, node_id = sys.argv[1], sys.argv[2]
+    cmd, arg = sys.argv[1], sys.argv[2]
     if cmd == "start":
         start()
     elif cmd == "login":
-        login(node_id)
+        global node_id
+        if arg  is not None:
+            node_id = arg
+        else:
+            node_id = socket.gethostname()
+        login()
 
 if __name__ == "__main__":
     main()

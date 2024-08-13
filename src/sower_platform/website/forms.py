@@ -6,7 +6,7 @@ class ManagementForm(forms.Form):
 
 
 # Form with a static dropdown
-class StaticDropdownForm(forms.Form):
+class VersionDropdownForm(forms.Form):
     CATEGORY_CHOICES = [
         ('latest', 'latest'),
         ('1.0.0', '1.0.0'),

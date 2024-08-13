@@ -2,7 +2,7 @@ from django.shortcuts import render
 from paho.mqtt import client as mqtt_client
 import subprocess
 from django.shortcuts import render, redirect
-from .forms import ManagementForm
+from .forms import ManagementForm, VersionDropdownForm
 import random
 import time
 
@@ -72,5 +72,10 @@ def management_view(request):
 
     else:
         form = ManagementForm()
-    return render(request, 'management.html', {'form': form})
+        versionDropdownForm = VersionDropdownForm()
+
+    return render(request, 'multiple_forms.html', {
+        'form': form,
+        'version_form': versionDropdownForm
+    })
 

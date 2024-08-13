@@ -56,7 +56,7 @@ def update_seed():
     )
 
 def start():
-    print("Running Sower client in background...")
+    print("Running Sower Agent in background...")
     client = connect_mqtt()
     subscribe(client)
     client.loop_forever()

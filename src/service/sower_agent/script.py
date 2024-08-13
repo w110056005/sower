@@ -55,11 +55,31 @@ def update_seed():
         links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
     )
 
-def main():
-    print("Running Sower client in background...")
+def start():
+    print("Running Sower Agent in background...")
     client = connect_mqtt()
     subscribe(client)
     client.loop_forever()
+
+def login():
+    import requests
+    r = requests.get('http://sower_platform_container:8000/login', params={'node_id' : node_id})
+    print(r.text+ ' registered.')
+
+def main():
+    import socket
+    import sys
+
+    cmd, arg = sys.argv[1], sys.argv[2]
+    if cmd == "start":
+        start()
+    elif cmd == "login":
+        global node_id
+        if arg  is not None:
+            node_id = arg
+        else:
+            node_id = socket.gethostname()
+        login()
 
 if __name__ == "__main__":
     main()

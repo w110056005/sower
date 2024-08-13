@@ -1,4 +1,4 @@
-name: Create Client Release
+name: Create Agent Release
 on:
   workflow_run:
     workflows: ["Build and Push Platform Image"]
@@ -32,6 +32,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: "Release Sower Client"
+          title: "Release Sower Agent"
           files: |
             ./src/service/dist/*

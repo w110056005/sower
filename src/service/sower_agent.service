@@ -1,11 +1,10 @@
 [Unit]
-Description=Sower Client Service
+Description=Sower Agent Service
 After=network.target
 
 [Service]
 User=Sower
 ExecStart=sower-start
-WorkingDirectory=./service
 Restart=always
 
 [Install]

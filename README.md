@@ -40,6 +40,6 @@ sower start
 
 ## Start Training
 ### Access the platform by
-<http://localhost:8000/admin>
+<http://localhost:8000/management>
 
 ### Click the "Start Training button"

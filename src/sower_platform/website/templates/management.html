@@ -1,7 +1,32 @@
-<form method="POST" action="{% url 'management' %}">
-  {% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
 
-  <br>
-  <button type="submit" name="button" value="TrainingStart">Start Training</button>
-  <button type="submit" name="button" value="UpgradeSeed">Upgrade Nodes</button>
-</form>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+</head>
+
+<body>
+  <form method="POST" action="{% url 'management' %}">
+    {% csrf_token %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <br>
+          <button type="submit" name="button" value="TrainingStart">Start Training</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <br>
+          {{ form.as_p }}
+          <button type="submit" name="button" value="UpgradeSeed">Upgrade Nodes</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</body>
+
+</html>

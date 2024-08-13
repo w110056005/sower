@@ -2,7 +2,7 @@ from django.shortcuts import render
 from paho.mqtt import client as mqtt_client
 import subprocess
 from django.shortcuts import render, redirect
-from .forms import ManagementForm, VersionDropdownForm
+from .forms import VersionDropdownForm
 import random
 import time
 

@@ -74,7 +74,7 @@ def management_view(request):
         form = ManagementForm()
         versionDropdownForm = VersionDropdownForm()
 
-    return render(request, 'multiple_forms.html', {
+    return render(request, 'management.html', {
         'form': form,
         'version_form': versionDropdownForm
     })

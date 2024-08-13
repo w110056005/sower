@@ -70,11 +70,16 @@ def login():
 def main():
     import socket
     import sys
+    
+    if len(sys.argv) >= 2:
+        action = sys.argv[1]
+    if len(sys.argv) == 3:
+        arg = sys.argv[2]
 
-    cmd, arg = sys.argv[1], sys.argv[2]
-    if cmd == "start":
+
+    if action == "start":
         start()
-    elif cmd == "login":
+    elif action == "login":
         global node_id
         if arg  is not None:
             node_id = arg

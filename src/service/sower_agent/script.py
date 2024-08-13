@@ -27,29 +27,30 @@ def connect_mqtt() -> mqtt_client:
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         print('Receive msg: '+ msg.payload.decode())
-        if(msg.payload.decode() == "Upgrade"):
-            update_seed()
+        if("Upgrade" in msg.payload.decode()):
+            version  = msg.payload.decode().split(',')[1]
+            update_seed(version)
     client.subscribe(topic)
     client.on_message = on_message
 
-def update_seed():
+def update_seed(version):
     print('Enter update_seed()')
     client = docker.from_env()
-    client.images.pull('w110056005/seed:latest')
+    client.images.pull('w110056005/seed:' + version)
     print('Image pull completed.')
     try:
         print('Removing legacy container.')
         container = client.containers.get('sower_seed_container')
         container.stop()
         container.remove()
-        print('Legacy comtainer removed.')
+        print('Legacy Stopped removed.')
         print('Seed is running.')
     except:
         print("no running sower_seed_container...")
 
     print('starting seed.')
     client.containers.run(
-        'w110056005/seed:latest',
+        'w110056005/seed:'+ version,
         name='sower_seed_container',
         detach=True, 
         links={'sower_platform_container': 'sower_platform_container'},  # Link to server container

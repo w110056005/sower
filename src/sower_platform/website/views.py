@@ -50,13 +50,15 @@ def execute_python_file(file_path, port):
 # Create your views here.
 def management_view(request):
     client = connect_mqtt()
+    versionDropdownForm = VersionDropdownForm()
+
     if request.method == 'POST':
         if 'TrainingStart' in request.POST:
             version_form = VersionDropdownForm(request.POST)
             print("Sending Start...")
             port = "8080"
             message = "Start,"+port
-            print("Send: {message}")
+            print("Send:" + message)
             publish(client, message)
             execute_python_file("./website/server.py", port)
             pass
@@ -64,12 +66,10 @@ def management_view(request):
             version_form = VersionDropdownForm(request.POST)
             if version_form.is_valid():
                 version = version_form.cleaned_data['version']
-                print("Sending Upgrading...")
                 message = "Upgrade,"+version
+                print("Send:" + message)
                 publish(client, message)
             pass
-    else:
-        versionDropdownForm = VersionDropdownForm()
 
     return render(request, 'management.html', {
         'version_form': versionDropdownForm

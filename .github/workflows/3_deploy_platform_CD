@@ -2,6 +2,8 @@ name: Deploy Platform Container
 on:
   workflow_run:
     workflows: ["Build and Push Platform Image"]
+    branches:
+      - cifar10/dev
     types:
       - completed
 

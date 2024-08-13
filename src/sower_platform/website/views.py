@@ -51,31 +51,27 @@ def execute_python_file(file_path, port):
 def management_view(request):
     client = connect_mqtt()
     if request.method == 'POST':
-        form = ManagementForm(request.POST)
-        # Handle form submission
-        button = request.POST.get('button')
-        # Process the submitted form data and perform actions based on the button clicked
-        print("button:"+button)
-        if button == 'TrainingStart':
+        if 'TrainingStart' in request.POST:
+            version_form = VersionDropdownForm(request.POST)
             print("Sending Start...")
-            port = "8090"
+            port = "8080"
             message = "Start,"+port
             print("Send: {message}")
             publish(client, message)
             execute_python_file("./website/server.py", port)
             pass
-        elif button == 'UpgradeSeed':
-            print("Sending Upgrading...")
-            message = "Upgrade"
-            publish(client, message)
+        elif 'UpgradeSeed' in request.POST:
+            version_form = VersionDropdownForm(request.POST)
+            if version_form.is_valid():
+                version = version_form.cleaned_data['version']
+                print("Sending Upgrading...")
+                message = "Upgrade,"+version
+                publish(client, message)
             pass
-
     else:
-        form = ManagementForm()
         versionDropdownForm = VersionDropdownForm()
 
     return render(request, 'management.html', {
-        'form': form,
         'version_form': versionDropdownForm
     })
 

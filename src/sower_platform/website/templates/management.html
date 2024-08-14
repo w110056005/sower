@@ -9,34 +9,24 @@
 </head>
 
 <body>
-  <h1 style="text-align: center;">Management Actions</h1>
   <form method="POST" action="{% url 'management' %}">
     {% csrf_token %}
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col">
-          <div class="card">
-            <div class="card-header">
-              Training
-            </div>
-            <div class="card-body">
-              <button type="submit" name="TrainingStart">Start</button>
-            </div>
-          </div>
+          <br>
+          <button type="submit" name="TrainingStart">Start Training</button>
         </div>
+      </div>
+      <div class="row">
         <div class="col">
-          <div class="card">
-            <div class="card-header">
-              Upgrade Nodes version
-            </div>
-            <div class="card-body">
-              {{ version_form.as_p }}
-              <button type="submit" name="UpgradeSeed">Upgrade</button>
-            </div>
-          </div>
+          <br>
+          {{ version_form.as_p }}
+          <button type="submit" name="UpgradeSeed">Upgrade Nodes</button>
         </div>
       </div>
     </div>
   </form>
 </body>
+
 </html>

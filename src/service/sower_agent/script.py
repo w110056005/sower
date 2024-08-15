@@ -48,13 +48,14 @@ def update_seed(version):
     except:
         print("no running sower_seed_container...")
 
-    print('starting seed.')
+    print('starting seed...')
     client.containers.run(
         'w110056005/seed:'+ version,
         name='sower_seed_container',
         detach=True, 
         links={'sower_platform_container': 'sower_platform_container'},  # Link to server container
     )
+    print('seed started!')
 
 def start():
     print("Running Sower Agent in background...")
